@@ -1,28 +1,21 @@
 ﻿namespace Cecil.AspectN.Matchers
 {
-    public class AndMatcher : IMatcher
+    public class AndMatcher(IMatcher left, IMatcher right) : IMatcher
     {
-        private readonly IMatcher _left;
-        private readonly IMatcher _right;
+        public IMatcher Left => left;
 
-        public AndMatcher(IMatcher left, IMatcher right)
-        {
-            _left = left;
-            _right = right;
-        }
+        public IMatcher Right => right;
 
-        public IMatcher Left => _left;
-
-        public IMatcher Right => _right;
+        public ITypeMatcher DeclaringTypeMatcher { get; } = new AndTypeMatcher(left.DeclaringTypeMatcher, right.DeclaringTypeMatcher);
 
         public bool IsMatch(MethodSignature signature)
         {
-            return _left.IsMatch(signature) && _right.IsMatch(signature);
+            return left.IsMatch(signature) && right.IsMatch(signature);
         }
 
         public override string ToString()
         {
-            return $"{_left} && {_right}";
+            return $"{left} && {right}";
         }
     }
 }

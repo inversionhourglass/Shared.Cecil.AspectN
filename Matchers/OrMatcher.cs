@@ -9,11 +9,14 @@
         {
             _left = left;
             _right = right;
+            DeclaringTypeMatcher = new OrTypeMatcher(left.DeclaringTypeMatcher, right.DeclaringTypeMatcher);
         }
 
         public IMatcher Left => _left;
 
         public IMatcher Right => _right;
+
+        public ITypeMatcher DeclaringTypeMatcher { get; }
 
         public bool IsMatch(MethodSignature signature)
         {

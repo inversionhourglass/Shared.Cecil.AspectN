@@ -12,9 +12,12 @@ namespace Cecil.AspectN.Matchers
         {
             _pattern = pattern;
             _propertyPattern = PropertyPatternParser.Parse(pattern);
+            DeclaringTypeMatcher = new TypeMatcher(_propertyPattern.DeclaringTypeProperty.DeclaringType);
         }
 
         public string Pattern => _pattern;
+
+        public ITypeMatcher DeclaringTypeMatcher { get; }
 
         public bool IsMatch(MethodSignature signature)
         {
