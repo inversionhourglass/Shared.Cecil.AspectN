@@ -9,6 +9,8 @@ namespace Cecil.AspectN.Patterns.Parsers
     {
         private static readonly Dictionary<string, ModifierPattern.Flags> _Modifiers = Enum.GetNames(typeof(ModifierPattern.Flags)).ToDictionary(x => x.ToLower(), x => (ModifierPattern.Flags)Enum.Parse(typeof(ModifierPattern.Flags), x));
 
+        public static readonly List<ITypePrefixParser> TypePrefixParsers = [];
+
         public static ModifierPattern ParseModifier(TokenSource tokens)
         {
             var required = ModifierPattern.Flags.None;
@@ -112,6 +114,14 @@ namespace Cecil.AspectN.Patterns.Parsers
             var start = tokens.Index;
             var token = tokens.Read();
             if (token == null) throw new ArgumentException($"Unrecognized pattern({tokens}), try parse type but read end of pattern");
+
+            foreach (var parser in TypePrefixParsers)
+            {
+                if (parser.IsMatch(token))
+                {
+                    return parser.ParseType(tokens);
+                }
+            }
 
             if (token.IsNot()) return new NotTypePattern(ParseType(tokens));
 

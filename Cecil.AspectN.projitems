@@ -69,10 +69,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Patterns\Parsers\AttributePatternParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patterns\Parsers\ExecutionPatternParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patterns\Parsers\GetterPatternParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Patterns\Parsers\ITypePrefixParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patterns\Parsers\MethodPatternParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patterns\Parsers\Parser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patterns\Parsers\PropertyPatternParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patterns\Parsers\SetterPatternParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Patterns\Parsers\TypeParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patterns\PatternExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patterns\PropertyPattern.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patterns\SetterPattern.cs" />

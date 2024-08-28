@@ -8,8 +8,14 @@ namespace Cecil.AspectN
 {
     public class SignatureParser
     {
-        private readonly static ConcurrentDictionary<MethodDefinition, MethodSignature> _Cache = new();
-        private readonly static ConcurrentDictionary<MethodDefinition, MethodSignature> _CompositeCache = new();
+        private static readonly ConcurrentDictionary<string, TypeSignature> _TypeCache = new();
+        private static readonly ConcurrentDictionary<MethodDefinition, MethodSignature> _Cache = new();
+        private static readonly ConcurrentDictionary<MethodDefinition, MethodSignature> _CompositeCache = new();
+
+        public static TypeSignature ParseType(TypeReference typeRef)
+        {
+            return _TypeCache.GetOrAdd(typeRef.FullName, tr => ParseType(typeRef, [], null));
+        }
 
         public static MethodSignature ParseMethod(MethodDefinition methodDef, bool compositeAccessibility)
         {

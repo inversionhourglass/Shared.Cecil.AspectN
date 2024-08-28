@@ -9,12 +9,17 @@ namespace Cecil.AspectN.Patterns.Parsers
         {
             var tokens = TokenSourceBuilder.Build(pattern);
 
+            return ParseCore(tokens);
+        }
+
+        public static ExecutionPattern ParseCore(TokenSource tokens)
+        {
             var modifier = ParseModifier(tokens);
             var async = ParseAsync(tokens);
             var returnType = ParseType(tokens);
             var declaringTypeMethod = ParseType(tokens).ToDeclaringTypeMethod();
             var parameters = ParseParameters(tokens);
-            
+
             var genericParameters = new List<GenericParameterTypePattern>();
             declaringTypeMethod.DeclaringType.Compile(genericParameters, false);
             if (declaringTypeMethod.Method.GenericPatterns is TypePatterns tps)
