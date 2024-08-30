@@ -1,7 +1,4 @@
 ﻿using Cecil.AspectN.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Cecil.AspectN.Patterns.Parsers
 {
