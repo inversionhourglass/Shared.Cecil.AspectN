@@ -8,7 +8,7 @@
 
         public override bool IsMatch(MethodSignature signature)
         {
-            return !signature.Definition.IsGetter && !signature.Definition.IsSetter && base.IsMatch(signature);
+            return !signature.Definition.IsGetter && !signature.Definition.IsSetter && !signature.Definition.IsConstructor && base.IsMatch(signature);
         }
     }
 }
