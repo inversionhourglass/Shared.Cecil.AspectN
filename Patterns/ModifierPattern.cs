@@ -35,6 +35,8 @@ namespace Cecil.AspectN.Patterns
             Forbidden = forbidden;
         }
 
+        public bool IsAny => Required == Flags.Any && !_staticRequired && Forbidden == Flags.None;
+
         public Flags Required => _required == Flags.Any ? (_staticRequired ? Flags.Static : Flags.Any) : (_staticRequired ? _required | Flags.Static : _required);
 
         public Flags Forbidden { get; }
