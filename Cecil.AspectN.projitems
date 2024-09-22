@@ -30,6 +30,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Matchers\RegexMatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matchers\SetterMatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matchers\TypeMatcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Matchers\TypeReferenceMatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MethodSignature.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modifier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PatternParser.cs" />
