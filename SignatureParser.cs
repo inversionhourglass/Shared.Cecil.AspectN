@@ -14,7 +14,7 @@ namespace Cecil.AspectN
 
         public static TypeSignature ParseType(TypeReference typeRef)
         {
-            return _TypeCache.GetOrAdd(typeRef.FullName, tr => ParseType(typeRef, [], null));
+            return _TypeCache.GetOrAdd($"{typeRef.Scope} {typeRef.FullName}", tr => ParseType(typeRef, [], null));
         }
 
         public static MethodSignature ParseMethod(MethodDefinition methodDef, bool compositeAccessibility)
