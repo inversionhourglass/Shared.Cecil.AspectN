@@ -87,6 +87,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Patterns\TypePatterns.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patterns\WildcardMatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PrimitiveExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SignatureExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SignatureParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tokens\StringOrChar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tokens\Token.cs" />
