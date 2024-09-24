@@ -13,7 +13,11 @@ namespace Cecil.AspectN
             var pair = new Pair(signature, matcher);
             if (!_Cache.TryGetValue(pair, out var def))
             {
-                foreach (var methodDef in signature.Reference.ToDefinition().Methods)
+                if (signature.Reference is not TypeDefinition typeDef)
+                {
+                    typeDef = signature.Reference.Resolve();
+                }
+                foreach (var methodDef in typeDef.Methods)
                 {
                     var methodSignature = SignatureParser.ParseMethod(methodDef, compositeAccessibility);
                     if (matcher.IsMatch(methodSignature))
