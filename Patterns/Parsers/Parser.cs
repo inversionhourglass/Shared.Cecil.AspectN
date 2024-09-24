@@ -66,9 +66,16 @@ namespace Cecil.AspectN.Patterns.Parsers
             do
             {
                 token = tokens.Peek();
-                if (token.IsComma() || token.IsRBracket())
+                if (token.IsComma())
                 {
                     typePatterns.Add(new AnyTypePattern());
+                }
+                else if (token.IsRBracket())
+                {
+                    if (typePatterns.Count != 0)
+                    {
+                        typePatterns.Add(new AnyTypePattern());
+                    }
                 }
                 else
                 {
