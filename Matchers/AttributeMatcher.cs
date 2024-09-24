@@ -18,6 +18,8 @@ namespace Cecil.AspectN.Matchers
 
         public ITypeMatcher DeclaringTypeMatcher => throw new System.NotImplementedException("The attribute pattern does not support matching the declaring type part.");
 
+        public bool SupportDeclaringTypeMatch => false;
+
         public bool IsMatch(MethodSignature signature)
         {
             return _attributePattern.IsMatch(signature.Attributes);

@@ -19,6 +19,8 @@ namespace Cecil.AspectN.Matchers
 
         public ITypeMatcher DeclaringTypeMatcher { get; }
 
+        public bool SupportDeclaringTypeMatch => true;
+
         public bool IsMatch(MethodSignature signature)
         {
             return _methodPattern.IsMatch(signature);

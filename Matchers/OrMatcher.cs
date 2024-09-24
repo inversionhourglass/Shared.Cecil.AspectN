@@ -1,22 +1,27 @@
-﻿namespace Cecil.AspectN.Matchers
+﻿using System;
+
+namespace Cecil.AspectN.Matchers
 {
     public class OrMatcher : IMatcher
     {
         private readonly IMatcher _left;
         private readonly IMatcher _right;
+        private readonly Lazy<ITypeMatcher> _declaringTypeMatcher;
 
         public OrMatcher(IMatcher left, IMatcher right)
         {
             _left = left;
             _right = right;
-            DeclaringTypeMatcher = new OrTypeMatcher(left.DeclaringTypeMatcher, right.DeclaringTypeMatcher);
+            _declaringTypeMatcher = new(() => new OrTypeMatcher(left.DeclaringTypeMatcher, right.DeclaringTypeMatcher));
         }
 
         public IMatcher Left => _left;
 
         public IMatcher Right => _right;
 
-        public ITypeMatcher DeclaringTypeMatcher { get; }
+        public ITypeMatcher DeclaringTypeMatcher => _declaringTypeMatcher.Value;
+
+        public bool SupportDeclaringTypeMatch => _left.SupportDeclaringTypeMatch && _right.SupportDeclaringTypeMatch;
 
         public bool IsMatch(MethodSignature signature)
         {

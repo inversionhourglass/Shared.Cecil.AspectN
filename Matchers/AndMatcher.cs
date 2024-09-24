@@ -1,21 +1,35 @@
-﻿namespace Cecil.AspectN.Matchers
+﻿using System;
+
+namespace Cecil.AspectN.Matchers
 {
-    public class AndMatcher(IMatcher left, IMatcher right) : IMatcher
+    public class AndMatcher : IMatcher
     {
-        public IMatcher Left => left;
+        private readonly Lazy<ITypeMatcher> _declaringTypeMatcher;
 
-        public IMatcher Right => right;
+        public AndMatcher(IMatcher left, IMatcher right)
+        {
+            Left = left;
+            Right = right;
+            SupportDeclaringTypeMatch = left.SupportDeclaringTypeMatch && right.SupportDeclaringTypeMatch;
+            _declaringTypeMatcher = new(() => new AndTypeMatcher(left.DeclaringTypeMatcher, right.DeclaringTypeMatcher));
+        }
 
-        public ITypeMatcher DeclaringTypeMatcher { get; } = new AndTypeMatcher(left.DeclaringTypeMatcher, right.DeclaringTypeMatcher);
+        public IMatcher Left { get; }
+
+        public IMatcher Right { get; }
+
+        public ITypeMatcher DeclaringTypeMatcher => _declaringTypeMatcher.Value;
+
+        public bool SupportDeclaringTypeMatch { get; }
 
         public bool IsMatch(MethodSignature signature)
         {
-            return left.IsMatch(signature) && right.IsMatch(signature);
+            return Left.IsMatch(signature) && Right.IsMatch(signature);
         }
 
         public override string ToString()
         {
-            return $"{left} && {right}";
+            return $"{Left} && {Right}";
         }
     }
 }
