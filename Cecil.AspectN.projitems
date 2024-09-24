@@ -14,6 +14,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)GenericParameterTypeSignature.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GenericSignature.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matchers\AndMatcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Matchers\CachedMatcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Matchers\CachedTypeMatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matchers\NotTypeMatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matchers\OrTypeMatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matchers\AndTypeMatcher.cs" />
