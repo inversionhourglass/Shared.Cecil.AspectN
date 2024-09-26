@@ -29,7 +29,7 @@ namespace Cecil.AspectN.Matchers
                 return _typeDef == typeDef;
             }
 
-            return _typeRef.Scope == typeRef.Scope && _typeRef.FullName == typeRef.FullName;
+            return _typeRef.Scope.ToString() == typeRef.Scope.ToString() && _typeRef.FullName == typeRef.FullName;
         }
     }
 }
