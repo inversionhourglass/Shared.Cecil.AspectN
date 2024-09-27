@@ -30,7 +30,7 @@ namespace Cecil.AspectN.Patterns
         public GenericNamePattern SeparateOutMethod()
         {
             var index = Tokens.End - 1;
-            var pattern = ExtractGenericNamePattern(Tokens, ref index, "TM", Token.DOT, Token.ELLIPSIS);
+            var pattern = ExtractGenericNamePattern(Tokens, ref index, "TM", false, Token.DOT, Token.ELLIPSIS);
 
             if (Tokens.Start > index)
             {
@@ -72,7 +72,7 @@ namespace Cecil.AspectN.Patterns
             }
         }
 
-        private GenericNamePattern ExtractGenericNamePattern(TokenSource tokens, ref int index, string genericPrefix, params StringOrChar[] stopTokens)
+        private GenericNamePattern ExtractGenericNamePattern(TokenSource tokens, ref int index, string genericPrefix, bool allowNameAbsent, params StringOrChar[] stopTokens)
         {
             var inGeneric = false;
             ITypePatterns? genericPatterns = null;
@@ -134,7 +134,7 @@ namespace Cecil.AspectN.Patterns
                 }
                 else if (stopTokens.Any(x => x.Equals(token.Value)))
                 {
-                    return NewGenericNamePattern(nameTokens, genericPatterns, genericPrefix);
+                    return NewGenericNamePattern(Tokens, nameTokens, genericPatterns, genericPrefix, allowNameAbsent);
                 }
                 else
                 {
@@ -144,11 +144,21 @@ namespace Cecil.AspectN.Patterns
 
             if (nameTokens.Count == 0) throw new ArgumentException($"Cannot extract method name pattern, cannot resolve name part from pattern({Tokens.Value})");
 
-            return NewGenericNamePattern(nameTokens, genericPatterns, genericPrefix);
+            return NewGenericNamePattern(Tokens, nameTokens, genericPatterns, genericPrefix, allowNameAbsent);
 
-            static GenericNamePattern NewGenericNamePattern(IReadOnlyCollection<Token> nameTokens, ITypePatterns? genericPatterns, string genericPrefix)
+            static GenericNamePattern NewGenericNamePattern(TokenSource tokens, IReadOnlyCollection<Token> nameTokens, ITypePatterns? genericPatterns, string genericPrefix, bool allowAbsent)
             {
-                var name = nameTokens.Count == 1 ? nameTokens.First().Value.ToString() : string.Concat(nameTokens.Select(x => x.Value.ToString()));
+                string name;
+                if (nameTokens.Count == 0 && allowAbsent)
+                {
+                    if (!allowAbsent) throw new ArgumentException($"Cannot extract method name pattern, cannot resolve name part from pattern({tokens.Value})");
+
+                    name = "*";
+                }
+                else
+                {
+                    name = nameTokens.Count == 1 ? nameTokens.First().Value.ToString() : string.Concat(nameTokens.Select(x => x.Value.ToString()));
+                }
                 genericPatterns ??= new AnyTypePatterns();
                 GenericPatternFactory.FormatVirtualName(genericPatterns, genericPrefix);
                 return new GenericNamePattern(name, genericPatterns);
@@ -157,6 +167,7 @@ namespace Cecil.AspectN.Patterns
 
         private ITypePattern CompileGenericOut(List<GenericParameterTypePattern> genericParameters, TokenSource tokens)
         {
+            // * || *.. || *..*
             if (tokens.Peek().IsStar() && (tokens.Count == 1 || tokens.Peek(1).IsEllipsis() && (tokens.Count == 2 || tokens.Count == 3 && tokens.Peek(2).IsStar()))) return CompiledTypePattern.NewAny();
 
             var nestedTypePatterns = new Stack<GenericNamePattern>();
@@ -206,7 +217,7 @@ namespace Cecil.AspectN.Patterns
             }
             do
             {
-                var pattern = ExtractGenericNamePattern(tokens, ref index, $"T{nestedDeep}", TypeSignature.NESTED_SEPARATOR, Token.DOT, Token.ELLIPSIS);
+                var pattern = ExtractGenericNamePattern(tokens, ref index, $"T{nestedDeep}", true, TypeSignature.NESTED_SEPARATOR, Token.DOT, Token.ELLIPSIS);
                 nestedTypePatterns.Push(pattern);
                 nestedDeep++;
             } while (index >= tokens.Start && tokens.Tokens[index--].Value == TypeSignature.NESTED_SEPARATOR);
