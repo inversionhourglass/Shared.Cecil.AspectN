@@ -9,7 +9,7 @@ namespace Cecil.AspectN.Patterns.Parsers
             var tokens = TokenSourceBuilder.Build(pattern);
 
             var typePattern = ParseType(tokens);
-            typePattern.Compile([], false);
+            typePattern.Compile([], true);
 
             return typePattern;
         }

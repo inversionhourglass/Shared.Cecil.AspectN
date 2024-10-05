@@ -12,7 +12,7 @@ namespace Cecil.AspectN.Patterns.Parsers
             var position = ParsePosition(tokens);
             var index = position == AttributePositioon.Parameter ? ParseIndex(tokens) : -1;
             var attributeType = ParseType(tokens);
-            attributeType.Compile([], false);
+            attributeType.Compile([], true);
 
             return new AttributePattern(position, index, attributeType);
         }

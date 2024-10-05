@@ -396,7 +396,16 @@ namespace Cecil.AspectN.Patterns
             }
             else
             {
-                compiledTypePattern = new CompiledTypePattern(new NamespacePattern(tokens), new GenericNamePatterns(patterns.ToArray()), assignableMatch);
+                var end = index;
+                Token tk;
+                while (--index >= 0)
+                {
+                    tk = tokens.Tokens[index];
+                    if (tk.IsLT() || tk.IsComma()) break;
+                }
+                index++;
+                var nsTokens = index == 0 ? tokens : tokens.Slice(index, end);
+                compiledTypePattern = new CompiledTypePattern(new NamespacePattern(nsTokens), new GenericNamePatterns(patterns.ToArray()), assignableMatch);
             }
 
             if (ranks.Count > 0) compiledTypePattern = new ArrayTypePattern(compiledTypePattern, ranks);
