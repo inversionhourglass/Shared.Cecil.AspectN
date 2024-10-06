@@ -4,52 +4,26 @@ using System.Collections.Concurrent;
 
 namespace Cecil.AspectN
 {
-    public class PatternParser
+    public class PatternParser : AbstractPatternParser<IMatcher>
     {
+        private readonly static PatternParser _Instance = new();
         private readonly static ConcurrentDictionary<string, IMatcher> _Cache = new();
+
+        private PatternParser() { }
 
         public static IMatcher Parse(string pattern)
         {
-            return _Cache.GetOrAdd(pattern, Impl);
-
-            static IMatcher Impl(string pattern)
-            {
-                var index = 0;
-                return Parse(pattern, ref index);
-            }
+            return _Cache.GetOrAdd(pattern, _Instance.ParsePattern);
         }
 
-        private static IMatcher Parse(string pattern, ref int index)
+        protected override IMatcher NewNotMatcher(IMatcher matcher) => new NotMatcher(matcher);
+
+        protected override IMatcher NewAndMatcher(IMatcher matcher1, IMatcher matcher2) => new AndMatcher(matcher1, matcher2);
+
+        protected override IMatcher NewOrMatcher(IMatcher matcher1, IMatcher matcher2) => new OrMatcher(matcher1, matcher2);
+
+        protected override IMatcher ParseSingle(string pattern, ref int index)
         {
-            var matcher = ParseSingle(pattern, ref index);
-            var connector = ParseConnector(pattern, ref index);
-            if (connector == Connector.And)
-            {
-                matcher = new AndMatcher(matcher, ParseNotOr(pattern, ref index, out connector));
-            }
-            if (connector == Connector.Or)
-            {
-                matcher = new OrMatcher(matcher, Parse(pattern, ref index));
-            }
-
-            return matcher;
-        }
-
-        private static IMatcher ParseNotOr(string pattern, ref int index, out Connector connector)
-        {
-            var matcher = ParseSingle(pattern, ref index);
-            connector = ParseConnector(pattern, ref index);
-            if (connector == Connector.And)
-            {
-                matcher = new AndMatcher(matcher, ParseNotOr(pattern, ref index, out connector));
-            }
-
-            return matcher;
-        }
-
-        private static IMatcher ParseSingle(string pattern, ref int index)
-        {
-            var not = ParseNot(pattern, ref index);
             var method = ParseMethod(pattern, ref index);
             var startSymbol = pattern[index++];
             if (startSymbol != '(') throw new ArgumentException($"Expect pattern body start with '(', but got '{startSymbol}'");
@@ -57,55 +31,10 @@ namespace Cecil.AspectN
             var endSymbol = pattern[index++];
             if (endSymbol != ')') throw new ArgumentException($"Expect pattern body end with ')', but got '{endSymbol}'");
 
-            return MatcherFactory.Create(not, method, matchPattern);
+            return MatcherFactory.Create(method, matchPattern);
         }
 
-        private static bool ParseNot(string pattern, ref int index)
-        {
-            var stash = index;
-            while (index < pattern.Length)
-            {
-                var ch = pattern[index++];
-                if (ch.IsWhiteSpace()) continue;
-                if (ch == '!') return true;
-                break;
-            }
-            index = stash;
-            return false;
-        }
-
-        private static Connector ParseConnector(string pattern, ref int index)
-        {
-            while (index < pattern.Length)
-            {
-                var ch = pattern[index++];
-                if (ch.IsWhiteSpace()) continue;
-                if (ch == '&')
-                {
-                    if (index < pattern.Length)
-                    {
-                        var next = pattern[index++];
-                        if (next == '&') return Connector.And;
-                        throw new ArgumentException($"Unexpected AND connector symbol '{next}' at index {index} of {pattern}");
-                    }
-                    return Connector.Eof;
-                }
-                if (ch == '|')
-                {
-                    if (index < pattern.Length)
-                    {
-                        var next = pattern[index++];
-                        if (next == '|') return Connector.Or;
-                        throw new ArgumentException($"Unexpected OR connector symbol '{next}' at index {index} of {pattern}");
-                    }
-                    return Connector.Eof;
-                }
-                throw new ArgumentException($"Unexpected connector symbol '{ch}' at index {index} of {pattern}");
-            }
-            return Connector.Eof;
-        }
-
-        private static string ParseMethod(string pattern, ref int index)
+        private string ParseMethod(string pattern, ref int index)
         {
             var start = index;
             while (index < pattern.Length)
@@ -123,7 +52,7 @@ namespace Cecil.AspectN
             return pattern.Substring(start, index - start);
         }
 
-        private static string ParseMatchPattern(string pattern, ref int index)
+        private string ParseMatchPattern(string pattern, ref int index)
         {
             char ch;
             var start = index;
@@ -164,14 +93,7 @@ namespace Cecil.AspectN
                 }
                 index++;
             }
-            throw new ArgumentException($"Unable parse regex token source from index {start} to the end of pattern({pattern})");
-        }
-
-        enum Connector
-        {
-            Eof,
-            And,
-            Or,
+            throw new ArgumentException($"Unable parse the token source from index {start} to the end of pattern({pattern})");
         }
     }
 }

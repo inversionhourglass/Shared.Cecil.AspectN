@@ -35,6 +35,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Matchers\TypeReferenceMatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MethodSignature.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modifier.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AbstractPatternParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TypePatternParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PatternParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patterns\AndTypePattern.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patterns\AnyGenericNamePatterns.cs" />

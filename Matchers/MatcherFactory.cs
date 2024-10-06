@@ -4,13 +4,12 @@ namespace Cecil.AspectN.Matchers
 {
     public class MatcherFactory
     {
-        public static IMatcher Create(bool not, string method, string pattern)
+        public static IMatcher Create(string method, string pattern)
         {
-            var matcher = Create(method.Trim().ToLower(), pattern);
-            return not ? new NotMatcher(matcher) : matcher;
+            return CreateCore(method.Trim().ToLower(), pattern);
         }
 
-        private static IMatcher Create(string method, string pattern) => method switch
+        private static IMatcher CreateCore(string method, string pattern) => method switch
         {
             "regex" => new RegexMatcher(pattern),
             "execution" => new ExecutionMatcher(pattern),
