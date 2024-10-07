@@ -75,7 +75,7 @@ namespace Cecil.AspectN
                 index++;
             }
 
-            return pattern;
+            return pattern.Substring(start, index - start);
 
             static ArgumentException Throw(char ch, int index, string pattern) => new($"Incorrect pattern format, unexpected token '{ch}' found at index {index} in the pattern: {pattern}");
         }
