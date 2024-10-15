@@ -8,6 +8,11 @@ namespace Cecil.AspectN
     {
         private static readonly Dictionary<Pair, MethodDefinition?> _Cache = [];
 
+        public static void CacheClear()
+        {
+            _Cache.Clear();
+        }
+
         public static MethodDefinition? FindMethod(this TypeSignature signature, IMatcher matcher, bool compositeAccessibility)
         {
             var pair = new Pair(signature, matcher);

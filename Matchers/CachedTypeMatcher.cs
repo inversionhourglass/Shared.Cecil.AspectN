@@ -18,6 +18,11 @@ namespace Cecil.AspectN.Matchers
             return result;
         }
 
+        public static void Clear()
+        {
+            _Cache.Clear();
+        }
+
         readonly struct Pair(ITypeMatcher matcher, TypeSignature signature)
         {
             public readonly ITypeMatcher Matcher = matcher;

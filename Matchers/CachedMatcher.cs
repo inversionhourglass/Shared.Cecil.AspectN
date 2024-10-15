@@ -32,6 +32,11 @@ namespace Cecil.AspectN.Matchers
             return result;
         }
 
+        public static void Clear()
+        {
+            _Cache.Clear();
+        }
+
         readonly struct Pair(IMatcher matcher, MethodSignature signature)
         {
             public readonly IMatcher Matcher = matcher;
