@@ -208,14 +208,18 @@ namespace Cecil.AspectN
         private static AttributeSignatures ParseAttributeSignatures(MethodDefinition methodDef)
         {
             var fromTypes = methodDef.DeclaringType.CustomAttributes.Select(ParseAttribute).ToArray();
-            var fromExecutions = methodDef.CustomAttributes
-                                        .UnionIf(methodDef.IsGetter, () => methodDef.DeclaringType.Properties.Single(x => x.GetMethod == methodDef).CustomAttributes)
-                                        .UnionIf(methodDef.IsSetter, () => methodDef.DeclaringType.Properties.Single(x => x.SetMethod == methodDef).CustomAttributes)
-                                        .Select(ParseAttribute)
-                                        .ToArray();
+            var fromExecutions = methodDef.CustomAttributes.ToList();
+            if (methodDef.IsGetter)
+            {
+                fromExecutions.AddRange(methodDef.DeclaringType.Properties.Single(x => x.GetMethod == methodDef).CustomAttributes);
+            }
+            if (methodDef.IsSetter)
+            {
+                fromExecutions.AddRange(methodDef.DeclaringType.Properties.Single(x => x.SetMethod == methodDef).CustomAttributes);
+            }
             var fromParameters = methodDef.Parameters.Select(x => x.CustomAttributes.Select(ParseAttribute).ToArray()).ToArray();
             var fromReturns = methodDef.MethodReturnType.CustomAttributes.Select(ParseAttribute).ToArray();
-            return new AttributeSignatures(fromTypes, fromExecutions, fromParameters, fromReturns);
+            return new AttributeSignatures(fromTypes, fromExecutions.Select(ParseAttribute).ToArray(), fromParameters, fromReturns);
         }
 
         private static TypeSignature ParseAttribute(CustomAttribute attribute)

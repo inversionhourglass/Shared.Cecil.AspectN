@@ -1,5 +1,5 @@
-﻿using Fody;
-using Cecil.AspectN.Tokens;
+﻿using Cecil.AspectN.Tokens;
+using System;
 
 namespace Cecil.AspectN.Patterns.Parsers
 {
@@ -26,7 +26,7 @@ namespace Cecil.AspectN.Patterns.Parsers
                 "para" => AttributePositioon.Parameter,
                 "ret" => AttributePositioon.Return,
                 "*" => AttributePositioon.Any,
-                var s => throw new FodyWeavingException($"Unrecognized attribute position [{s}], please check the attribute pattern ({tokens})")
+                var s => throw new ArgumentException($"Unrecognized attribute position [{s}], please check the attribute pattern ({tokens})")
             };
         }
 
@@ -36,7 +36,7 @@ namespace Cecil.AspectN.Patterns.Parsers
             {
                 "*" => -1,
                 var s when int.TryParse(s, out var index) && index >= 0 => index,
-                var s => throw new FodyWeavingException($"Unrecognized parameter index [{s}], please check the attribute pattern ({tokens})")
+                var s => throw new ArgumentException($"Unrecognized parameter index [{s}], please check the attribute pattern ({tokens})")
             };
         }
     }
