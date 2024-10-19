@@ -18,6 +18,8 @@ namespace Cecil.AspectN.Matchers
             "setter" => new SetterMatcher(pattern),
             "property" => new PropertyMatcher(pattern),
             "attr" => new AttributeMatcher(pattern),
+            "ctor" => new CtorMatcher(pattern),
+            "cctor" => new CctorMatcher(pattern),
             _ => throw new ArgumentException($"unknow matcher type({method}) with pattern {pattern}")
         };
     }

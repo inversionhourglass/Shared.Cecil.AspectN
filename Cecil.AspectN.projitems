@@ -16,6 +16,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Matchers\AndMatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matchers\CachedMatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matchers\CachedTypeMatcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Matchers\CctorMatcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Matchers\CtorMatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matchers\NotTypeMatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matchers\OrTypeMatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matchers\AndTypeMatcher.cs" />
@@ -36,6 +38,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)MethodSignature.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modifier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AbstractPatternParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Patterns\CctorPattern.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Patterns\CtorPattern.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Patterns\Parsers\CctorPatternParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Patterns\Parsers\CtorPatternParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TypePatternParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PatternParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patterns\AndTypePattern.cs" />
