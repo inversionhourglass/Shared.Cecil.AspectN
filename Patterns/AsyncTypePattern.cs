@@ -32,6 +32,6 @@ namespace Cecil.AspectN.Patterns
             return typeSignature.Generics.Length == 1 && IsTask(signature, typeSignature) && ElementPattern.IsMatch(typeSignature.Generics[0]);
         }
 
-        private bool IsTask(TypeSignature signature, GenericSignature typeSignature) => signature.Namespace == "System.Threading.Tasks" && (typeSignature.Name == "Task" || typeSignature.Name == "ValueTask");
+        private static bool IsTask(TypeSignature signature, GenericSignature typeSignature) => signature.ArrayRanks.Length == 0 && signature.Namespace == "System.Threading.Tasks" && (typeSignature.Name == "Task" || typeSignature.Name == "ValueTask");
     }
 }
